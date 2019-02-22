@@ -3,6 +3,13 @@ import numpy as np
 from config import Dir, rawFile, encode, SEP 
 
 
+def data_purge(info: str) -> str:
+    """ 数据清洗：去除停用词；判断该info是不是度量值 """
+    if info[:3] == "<a>":
+        info = info[3: -4]
+    return info
+
+
 def convert_kg():
     """
     将实体/关系映射为数字，同时保存
@@ -22,8 +29,7 @@ def convert_kg():
             (h, r, t) = line.rstrip().split(SEP)
             if r == "DESC":
                 continue
-            if t[:3] == "<a>":
-                t = t[3:-4]
+            t = data_purge(t)
             if len(t) == 0:
                 print(line)
                 continue

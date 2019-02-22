@@ -1,4 +1,6 @@
-from config import rawFile, encode, SEP
+import re
+import os
+from config import Dir, rawFile, encode, SEP
 
 """
 heads:1,857,754     relations:135,818        tails:12,718,355
@@ -101,15 +103,12 @@ def count_item():
         plt.savefig("top_0_001_freq_tail.jpg")
 
 
-def which_is_complex():
+def which_is_complex(threshold=25):
     """ 显示最复杂的relation """
-    threshold = 25
     cnt = {}
     with open(rawFile, encoding=encode) as f:
         for line in f.readlines():
             (_, r, t) = line.strip().split(SEP)
-            # h = h.lstrip("<a>").rstrip("</a>")
-            r = r.lstrip("<a>").rstrip("</a>")
             t = t.lstrip("<a>").rstrip("</a>")
 
             if len(t) > threshold:
@@ -121,4 +120,43 @@ def which_is_complex():
     complex_relations = sorted(cnt.items(), key=lambda x: x[1], reverse=True)[:100]
     print(complex_relations)
 
-which_is_complex()
+
+def numeric_relations():
+    """ 找出和度量相关的relation """
+    pat = re.compile(r"\d+")
+    rels = {}
+    with open(rawFile, encoding=encode) as f:
+        for line in f.readlines():
+            (_, r, t) = line.strip().split(SEP)
+            if r == "DESC":
+                continue
+            if pat.search(t):
+                if r not in rels:
+                    rels[r] = 1
+                else:
+                    rels[r] += 1
+    print("Scan done.")
+    total = sum(map(lambda x: x[1], rels.items()))
+    print(f"relations: {len(rels)}, tails: {total}")
+    rels = sorted(rels.items(), key=lambda x: x[1], reverse=True)
+
+    # 取相关tails总和超过总体tails的85%
+    cnt, threshold = 0, int(total * 0.85)
+    for (i, (_, num)) in enumerate(rels):
+        cnt += num
+        if cnt >= threshold:
+            print(f"sum(Top-{i+1}) >= threshold!")
+            break
+    rels = rels[:i]
+    with open("num_rels.txt", "w", encoding=encode) as f:
+        rels = list(map(lambda x: x[0], rels))
+        for rel in rels:
+            f.write(f"{rel}\t{rel}\n")
+    print("Write done.")
+
+
+if __name__ == "__main__":
+    # count_h_r_t()
+    # count_item()
+    # which_is_complex()
+    numeric_relations()

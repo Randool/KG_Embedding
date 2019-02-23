@@ -1,5 +1,6 @@
 import re
 import os
+import numpy as np
 from config import Dir, rawFile, encode, SEP
 
 """
@@ -88,17 +89,20 @@ def count_item():
         tails = list(map(func, tails))
 
         print("Drawing...")
-        plt.plot(heads)
+        x = np.log10(np.arange(1, len(heads) + 1, 1))
+        plt.plot(x, heads)
         plt.title("log10(head_0_001_freq)")
         plt.savefig("top_0_001_freq_head.jpg")
         plt.cla()
 
-        plt.plot(relations)
+        x = np.log10(np.arange(1, len(relations) + 1, 1))
+        plt.plot(x, relations)
         plt.title("log10(rel_0_001_freq)")
         plt.savefig("top_0_001_freq_rel.jpg")
         plt.cla()
 
-        plt.plot(tails)
+        x = np.log10(np.arange(1, len(tails) + 1, 1))
+        plt.plot(x, tails)
         plt.title("log10(tail_0_001_freq)")
         plt.savefig("top_0_001_freq_tail.jpg")
 
@@ -155,8 +159,19 @@ def numeric_relations():
     print("Write done.")
 
 
+def legislation_relations():
+    """ 找出和法律条款有关的数据 """
+    with open(rawFile, encoding=encode) as f:
+        for line in f.readlines():
+            (_, r, t) = line.strip().split(SEP)
+            if r == "DESC":
+                continue
+    pass
+
+
 if __name__ == "__main__":
     # count_h_r_t()
-    # count_item()
+    count_item()
     # which_is_complex()
-    numeric_relations()
+    # numeric_relations()
+    # legislation_relations()

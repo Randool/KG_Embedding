@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 
-from ..config import embed_dim, FloatTensor
+from .config import FloatTensor
 
 
 class TransE(nn.Module):
@@ -29,3 +30,14 @@ class TransE(nn.Module):
         pos = torch.sum((ph_e + pr_e - pt_e)**2, 1)
         neg = torch.sum((nh_e + nr_e - nt_e)**2, 1)
         return pos, neg
+
+
+def train(model: nn.Module, train_loader, lr, epochs):
+    #
+    optimizer = optim.Adam(model.parameters(), lr=lr)
+
+    for epoch in range(epochs):
+        for batch in train_loader():
+            ph, pr, pt, nh, nr, nt = batch
+            pos, neg = model(ph, pr, pt, nh, nr, nt)
+            

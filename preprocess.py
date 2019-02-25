@@ -1,5 +1,7 @@
+"""
+数据预处理代码
+"""
 import os
-
 from config import Dir, rawFile, encode, SEP, cookedFile
 
 

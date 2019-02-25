@@ -49,11 +49,14 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
         return loss.item()
 
     train_losses, val_losses = [], []
+
     for epoch in range(epochs):
         tic = time.time()
+        
         # prepare data loader
         train_loader = load_batch_triple(train_file, batch_size)
         val_loader = load_batch_triple(val_file, batch_size)
+        
         # Train state
         train_loss, val_loss = 0, 0
         train_cnt, val_cnt = 0, 0   # 用于计算loss平均值
@@ -65,6 +68,7 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
             for data in val_loader:
                 val_cnt += data[0][0].shape[0]    # 累计batch
                 val_loss += stage(data, False)
+        
         # Visual
         print(f"Epoch {epoch:#2d} | Train loss: {(train_loss / train_cnt):#.4f}", end=" | ")
         print(f"Validation loss: {(val_loss / val_cnt):#.4f}", end=" | ")
@@ -72,6 +76,7 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
         train_losses.append(train_loss / train_cnt)
         val_losses.append(val_loss / val_cnt)
         tic = time.time()
+    
     # Save model
     torch.save(model, "embed.pt")
     # Draw

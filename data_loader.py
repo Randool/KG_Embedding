@@ -3,7 +3,7 @@ from copy import deepcopy
 import numpy as np
 
 from model.config import LongTensor
-from .config import SEP
+from config import SEP
 
 
 def corrupt_triple(raw_batch: list, entityTotal: int):
@@ -26,11 +26,16 @@ def corrupt_triple(raw_batch: list, entityTotal: int):
     return negs
 
 
+_register = []
+
 def load_batch_triple(filename: str, batch_size: int) -> tuple:
     """
     由于数据量太大，只好使用generator节约内存
     返回结果形如：(((ph),(pr),(pt)), ((nh),(nr),(nt)))
     """
+    if filename not in _register:
+        print(f"[data loader] loading {filename}")
+        _register.append(filename)
     f = open(filename)
     toInt = lambda x: int(x)
     with open("note.log") as note:

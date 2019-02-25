@@ -11,6 +11,8 @@ def data_pruge(r, t):
         t = t[3:-4]
     if r in rels:
         t = rels[r]
+    if len(r) > 2 and r[0] == "第" and r[-1] == "条":
+        t = "条款"
     return t
 
 
@@ -52,8 +54,6 @@ def convert_kg():
             triple = f"{entity_id2index[h]}\t{relation_id2index[r]}\t{entity_id2index[t]}\n"
             f.write(triple)
         print("triples_index Done.")
-        print(f"number of entities: {entity_cnt}")
-        print(f"number of relations: {relation_cnt}")
     file.close()
     
     # 记录entity和relation总数，在产生neg数据时有用
@@ -106,7 +106,6 @@ if __name__ == "__main__":
             rels = f.read().split("\n")[:-1]
             rels = list(map(lambda x: x.split("\t"), rels))
             rels = dict(rels)   # 将二元组转化为字典
-    # 法律条款信息处理
     
     # make KG
     convert_kg()

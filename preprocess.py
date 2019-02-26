@@ -53,15 +53,15 @@ def convert_kg():
                 entity_id2index[t] = entity_cnt
                 entity_cnt += 1
 
-            triple = f"{entity_id2index[h]}\t{relation_id2index[r]}\t{entity_id2index[t]}\n"
+            triple = "{}\t{}\t{}\n".format(entity_id2index[h], relation_id2index[r], entity_id2index[t])
             f.write(triple)
         print("triples_index Done.")
     file.close()
     
     # 记录entity和relation总数，在产生neg数据时有用
     with open("note.log", "w") as f:
-        info = f"total_entity\t{entity_cnt}\ntotal_relation\t{relation_cnt}"
-        print(f"'{info}' has been writen to note.log")
+        info = "total_entity\t{}\ntotal_relation\t{}".format(entity_cnt, relation_cnt)
+        print("'{}' has been writen to note.log".format(info))
         f.write(info)
     
     # index_entity
@@ -80,7 +80,7 @@ def convert_kg():
 def split_train_val_set(file: str, val_ratio=0.8):
     import numpy as np
 
-    print(f"Loading {file}")
+    print("Loading {}".format(file))
     tps = np.loadtxt(file, dtype=np.int)
     print("Shuffling...")
     np.random.shuffle(tps)
@@ -91,12 +91,12 @@ def split_train_val_set(file: str, val_ratio=0.8):
     print("Save to train data")
     with open(os.path.join(path, "train_" + filename), "w") as f:
         for i in range(num):
-            f.write(f"{tps[i][0]}\t{tps[i][1]}\t{tps[i][2]}\n")
+            f.write("{}\t{}\t{}\n".format(tps[i][0], tps[i][1], tps[i][2]))
     
     print("Save to val data")
     with open(os.path.join(path, "val_" + filename), "w") as f:
         for i in range(num, len(tps)):
-            f.write(f"{tps[i][0]}\t{tps[i][1]}\t{tps[i][2]}\n")
+            f.write("{}\t{}\t{}\n".format(tps[i][0], tps[i][1], tps[i][2]))
 
 
 if __name__ == "__main__":

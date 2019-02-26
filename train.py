@@ -70,9 +70,9 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
                 val_loss += stage(data, False)
         
         # Visual
-        print(f"Epoch {epoch:#2d} | Train loss: {(train_loss / train_cnt):#.4f}", end=" | ")
-        print(f"Validation loss: {(val_loss / val_cnt):#.4f}", end=" | ")
-        print(f"Cost: {(time.time() - tic) / 60:#.2f} min")
+        print("Epoch {:#3d} | Train loss: {:#.4f}".format(epoch, (train_loss / train_cnt)), end=" | ")
+        print("Validation loss: {:#.4f}", end=" | ".format((val_loss / val_cnt)))
+        print("Cost: {:#.2f} min".format((time.time() - tic) / 60))
         train_losses.append(train_loss / train_cnt)
         val_losses.append(val_loss / val_cnt)
         tic = time.time()
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     with open("note.log") as f:
         ent_cnt = int(f.readline().split(SEP)[1])
         rel_cnt = int(f.readline().split(SEP)[1])
-        print(f"Entity count {ent_cnt}\nRelation count {rel_cnt}")
+        print("Entity count {}\nRelation count {}".format(ent_cnt, rel_cnt))
 
     model = TransE(ent_cnt, rel_cnt, embed_dim)
     if CUDA:

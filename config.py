@@ -1,7 +1,7 @@
 import os
 
 # 文件
-Dir = "D:\\data\\KG"
+Dir = "D:\\data\\KG" if os.name == "nt" else "/data2/KG"
 rawFile = os.path.join(Dir, "triples.txt")
 cookedFile = os.path.join(Dir, "triples_index.txt")
 

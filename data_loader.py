@@ -37,7 +37,7 @@ def load_batch_triple(filename: str, batch_size: int) -> tuple:
     返回结果形如：(((ph),(pr),(pt)), ((nh),(nr),(nt)))
     """
     if filename not in _register:
-        print(f"[data loader] loading {filename}")
+        print("[data loader] loading {}".format(filename))
         _register.append(filename)
     f = open(filename)
     toInt = lambda x: int(x)

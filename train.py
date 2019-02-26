@@ -48,7 +48,7 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
             optimizer.step()
         return loss.item()
 
-    train_losses, val_losses = [], []
+    train_losses, val_losses, total_time = [], [], 0
 
     for epoch in range(epochs):
         tic = time.time()
@@ -69,14 +69,21 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
                 val_cnt += data[0][0].shape[0]    # 累计batch
                 val_loss += Stage(data, "val")
         
+        # Statistic
+        ave_train_loss = train_loss / train_cnt
+        ave_val_loss = val_loss / val_cnt
+        train_losses.append(ave_train_loss)
+        val_losses.append(ave_val_loss)
+        time_frag = (time.time() - tic) / 60
+        total_time += time_frag
+        
         # Visual
-        print("Epoch {:#3d} | Train loss: {:#.4f}".format(epoch, (train_loss / train_cnt)), end=" | ")
-        print("Validation loss: {:#.4f}".format((val_loss / val_cnt)), end=" | ")
-        print("Cost: {:#.2f} min".format((time.time() - tic) / 60))
-        train_losses.append(train_loss / train_cnt)
-        val_losses.append(val_loss / val_cnt)
+        info_train = "Epoch {:#3d} | Train loss: {:#.4f}".format(epoch, ave_train_loss)
+        info_val = "Validation loss: {:#.4f}".format(ave_train_loss)
+        print("{} | {} | Cost: {:#.2f} min".format(info_train, info_val, time_frag))
         tic = time.time()
-    
+        
+    print("====== Finish ======\t{} min".format(total_time))
     # Save model
     torch.save(model, "embed.pt")
     # Draw

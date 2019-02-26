@@ -91,7 +91,7 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
     
     text = "====== Finish ======\t{} min".format(total_time)
     print(text)
-    log_file.write(text)
+    log_file.write("{}\n".format(text))
 
     # Save model
     torch.save(model, "embed.pt")

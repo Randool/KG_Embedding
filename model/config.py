@@ -2,11 +2,11 @@ import torch
 
 
 embed_dim = 4   # 嵌入维数
-lr = 1e-3       # 学习率
+lr = 5e-3       # 学习率
 margin = 1.0    #
 batch_size = 524288 # 65535
 epochs = 60
-step_size = 10   # 学习率下调步长
+step_size = 15   # 学习率下调步长
 
 # CUDA
 CUDA = torch.cuda.is_available()

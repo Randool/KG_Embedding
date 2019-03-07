@@ -1,11 +1,11 @@
 import torch
 
 
-embed_dim = 4   # 嵌入维数
+embed_dim = 6   # 嵌入维数
 lr = 5e-3       # 学习率
 margin = 1.0    #
-batch_size = 524288 # 65535
-epochs = 60
+batch_size = 524288 # 2^19
+epochs = 70
 step_size = 15   # 学习率下调步长
 
 # CUDA

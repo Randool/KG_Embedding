@@ -83,7 +83,7 @@ def train(model: nn.Module, train_file, val_file, lr, epochs):
         
         # Visual
         info_train = "Epoch {:#3d} | Train loss: {:#.4f}".format(epoch, ave_train_loss)
-        info_val = "Validation loss: {:#.4f}".format(ave_train_loss)
+        info_val = "Validation loss: {:#.4f}".format(ave_val_loss)
         info = "{} | {} | Cost: {:#.2f} min".format(info_train, info_val, time_frag)
         print(info)
         log_file.write("{}\n".format(info))
